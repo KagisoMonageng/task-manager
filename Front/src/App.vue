@@ -1,18 +1,31 @@
-<script setup>
-import SideBar from './components/SideBar.vue'
-
+<script >
+import SideBar from './components/SideBar.vue';
 
 import { onMounted } from 'vue'
 import { initFlowbite } from 'flowbite'
 
-// initialize components based on data attribute selectors
-onMounted(() => {
-    initFlowbite();
-})
+export default{
+    data() {
+        return { isLoggedIn: false };
+    },
+    mounted() {
+        if (sessionStorage.getItem("token")) {
+            this.isLoggedIn = true;
+        }
+        else {
+            this.isLoggedIn = false;
+        }
+    },
+    created() {
+        initFlowbite();
+    },
+    components: { SideBar }
+}
 </script>
 
 <template>
-  <SideBar></SideBar>
+  <RouterView v-if="isLoggedIn == false"/>
+  <SideBar v-if="isLoggedIn"></SideBar>
 </template>
 
 
