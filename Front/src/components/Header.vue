@@ -12,10 +12,10 @@
         </div>
 
        <div class="profile flex gap-3 w-full h-full place-items-center justify-end transition-all duration-300 cursor-pointer hover:scale-95">
-        <div class="flex flex-col"><h3 class="font-semibold">Kagiso Monageng</h3>
+        <div class="flex flex-col"><h3 class="font-semibold">{{ user.name }} {{ user.surname }}</h3>
         <span class=" text-sm text-end text-blue-800">Edit Profile</span></div>
         <div class="flex place-items-center">
-            <div class="flex justify-center place-items-center image rounded-full bg-gray-600 w-12 h-12 "><img class="w-11 h-11 m-auto rounded-full" src="https://images.unsplash.com/photo-1586196877083-6a4e8a995cf1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1266&q=80" alt=""></div>
+            <div class="flex justify-center place-items-center image rounded-full bg-gray-600 w-12 h-12 "><img class="w-11 h-11 m-auto rounded-full" v-bind:src="user.image" alt=""></div>
         </div>
        </div>
     </div>
@@ -23,10 +23,9 @@
 <script>
 import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";
+import VueJwtDecode from 'vue-jwt-decode'
 
-onMounted(() => {
-    initFlowbite();
-});
+
 var time = 0;
 
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -34,10 +33,16 @@ const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep
 export default {
     data(){
         return {
-         
+            user : {
+                name:'',
+                surname:'',
+                image:'',
+            }
         };
     },
     mounted(){
+        initFlowbite();
+        this.user = VueJwtDecode.decode(sessionStorage.getItem('token'))
         let time = document.getElementById('time')
         let date = document.getElementById('date')
 

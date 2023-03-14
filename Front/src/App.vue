@@ -9,6 +9,8 @@ export default{
         return { isLoggedIn: false };
     },
     mounted() {
+        
+    },watch(){
         if (sessionStorage.getItem("token")) {
             this.isLoggedIn = true;
         }

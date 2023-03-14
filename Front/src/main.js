@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import VueJwtDecode from 'vue-jwt-decode'
 
 import './assets/main.css'
 import './index.css'
