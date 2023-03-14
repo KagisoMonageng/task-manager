@@ -1,34 +1,25 @@
-<script >
-import { onMounted } from 'vue'
-import { initFlowbite } from 'flowbite'
-export default {
-        name:'Login',
-        data() { 
-            return{
-                password:'',
-                email:'',
-                email:'',
-                email:'',
-                email:''
+<template>
+    <div>
 
+    </div>
+</template>
+
+<script>
+    export default {
+        data() {
+            return {
+                key: value
             }
-        },mounted(){
-            initFlowbite();
-        },
-        methods:{
-            submit(){
-                let data = {
-                    password : this.password,
-                    email: this.email
-                }
-
-
+        },mounted () {
+            ;
+        },methods: {
+            name() {
+                
             }
         },
     }
 </script>
 
-<template>
-    Register Works
-    
-</template>
+<style lang="scss" scoped>
+
+</style>
