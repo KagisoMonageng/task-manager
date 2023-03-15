@@ -15,8 +15,8 @@ export default {
       }
    },
    async created() {
-      const res = await axios.get('games/getGames')
-      this.games = res.data
+      // const res = await axios.get('games/getGames')
+      // this.games = res.data
    },
    mounted() {
       initFlowbite();

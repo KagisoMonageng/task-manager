@@ -70,10 +70,11 @@ exports.register = async (req, res) =>  {
     db.query(sql, [email], (err, results) => {
         if (results.rowCount == 0) {
             db.query(
-                "INSERT INTO users (name,surname,email,password,gender,image) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",
-                [name, surname, email, password, gender, image],
+                "INSERT INTO users (name,surname,email,password,image) VALUES ($1,$2,$3,$4,$5) RETURNING *",
+                [name, surname, email, password, image],
                 (db_err, results) => {
                   if (db_err) {
+                    console.log(db_err)
                     res.status(400).json({ message: "Error registering user" });
                   } else {
                     let key = jwt.sign({
@@ -81,7 +82,7 @@ exports.register = async (req, res) =>  {
                         name:results.rows[0].name,
                         email: results.rows[0].email,
                         surname:results.rows[0].surname,
-                        image:results[0].image
+                        image:results.rows[0].image
                     },
                     'mc&ofj^%ihf(ifofhoh$$^%iuhf',
                     {
