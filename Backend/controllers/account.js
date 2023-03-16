@@ -113,4 +113,11 @@ exports.register = async (req, res) => {
 
 exports.getUser = async (req, res) => {
 
+    const user_id = req.params.user_id
+    const sql = `SELECT * FROM users WHERE  user_id = ${user_id}`
+    db.query(sql,[user_id],(err,user)=>{
+
+    })
+
+
 };

@@ -12,6 +12,7 @@ const task = require("./routes/tasks.route");
 
 
 
+
 app.use(express.json())
 app.use(cors(corsOptions));
 app.listen(port,()=>{
