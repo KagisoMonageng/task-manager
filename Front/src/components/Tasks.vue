@@ -8,23 +8,57 @@ export default {
     data() {
         return {
             tasks: [],
+            inProgress : [],
             today: new Date()
         }
-    }, created() {
+    }, async created() {
         initFlowbite();
-    }, mounted() {
-
+        
     },
-    async watch() {
+     async mounted() {
         try {
-            this.tasks = await axios.get('tasks/' + VueJwtDecode.decode(sessionStorage.getItem('token')).user_id)
+            let response = await axios.get('tasks/' + VueJwtDecode.decode(sessionStorage.getItem('token')).user_id)
+            this.tasks = response.data
+        } catch (error) {
+            console.log(error)
+        }
+
+        try {
+            let response = await axios.get('tasks/in-progress/'+ VueJwtDecode.decode(sessionStorage.getItem('token')).user_id)
+            this.inProgress = response.data;
         } catch (error) {
             console.log(error)
         }
     },
     methods: {
-        deleteTask() { },
+        async refresh(){
+            try {
+            let response = await axios.get('tasks/' + VueJwtDecode.decode(sessionStorage.getItem('token')).user_id)
+            let res = await axios.get('tasks/in-progress/'+ VueJwtDecode.decode(sessionStorage.getItem('token')).user_id)
+            this.inProgress = res.data;
+            this.tasks = response.data
+        } catch (error) {
+            console.log(error)
+        }
+
+        },
+        async deleteTask(task_id) {
+            try {
+                let response = await axios.delete('tasks/'+task_id)
+                this.refresh()
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.refresh()
+            }
+         },
+
         setProgress() { },
+        dateFormat(date){
+            let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            let unformated = new Date(date);
+            return unformated.getDate() + " " + months[unformated.getMonth()] + " " + unformated.getFullYear();
+        }
     },
 }
 </script>
@@ -102,6 +136,7 @@ export default {
                 </div>
 
                 <!-- Data goes here -->
+                <div class="flex w-full justify-start mb-2"><span v-on:click="refresh()" class="hover:bg-slate-200 cursor-pointer p-2 rounded-lg items-center content-center"><i class="fi fi-rr-rotate-right"></i>  Refresh</span></div>
                 <table class="table w-full border-collapse">
                     <thead class="">
                         <tr class="">
@@ -114,12 +149,12 @@ export default {
                     </thead>
                     <tbody>
 
-                        <tr v-for="task of tasks" class="table-row h-16 bg-gray-100 rounded-xl">
+                        <tr v-for="task of tasks" class="table-row h-16 bg-gray-100 rounded-xl hover:bg-gray-200 cursor-pointer">
                             <td class="w-1/5 text-left pl-3 title">{{task.title}}</td>
                             <td class="w-2/5 text-left pl-3">{{ task.desc }} </td>
-                            <td class="w-1/5 text-left pl-3">{{ task.due }}</td>
+                            <td class="w-1/5 text-left pl-3">{{ dateFormat(task.due)  }}</td>
                             <td class=" text-left pl-3"><span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ task.status }}</span></td>
-                            <td class="w-16 text-lg "><div class="btn hover:bg-gray-200 transition-all duration-500 hover:text-white hover:scale-105 w-10 h-10 rounded-full flex justify-center place-items-center"><i class="fi fi-rr-trash my-auto"></i></div></td>
+                            <td class="w-16 text-lg "><div @click="deleteTask(task.task_id)" class="btn hover:bg-gray-200 transition-all duration-500 hover:text-white hover:scale-105 w-10 h-10 rounded-full flex justify-center place-items-center"><i class="fi fi-rr-trash my-auto"></i></div></td>
                         </tr>
                         
 
@@ -135,29 +170,11 @@ export default {
             <div class=" w-full py-4 px-12 flex flex-col justify-center pt-8 gap-4 rounded-3xl bg-gray-100 h-full">
                 <div class="flex justify-center -space-x-32">
                     <div
-                        class="in-progress w-40 h-24 cursor-pointer transition-all p-4 duration-300 hover:-translate-y-2 hover:shadow-md rounded-3xl">
-                        <p class="text-white w-full font-medium overflow-hidden text-ellipsis">Start the day on a good note
-                            to get a nice life and enjoy it</p>
-                        <p class="text-white font-light">20 Mar 2020</p>
+                        v-for="task of inProgress" class="in-progress w-40 h-24 cursor-pointer transition-all p-4 duration-500 hover:-translate-y-8 hover:shadow-md rounded-3xl">
+                        <p class="text-white w-full font-medium overflow-hidden text-ellipsis">{{ task.desc }}</p>
+                        <p class="text-white font-light">{{ dateFormat(task.due) }}</p>
                     </div>
-                    <div
-                        class="in-progress w-40 h-24 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-md rounded-3xl">
-                        <p class="text-white w-full font-medium overflow-hidden text-ellipsis">Start the day on a good note
-                            to get a nice life and enjoy it</p>
-                        <p class="text-white font-light">20 Mar 2020</p>
-                    </div>
-                    <div
-                        class="in-progress w-40 h-24 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-md rounded-3xl">
-                        <p class="text-white w-full font-medium overflow-hidden text-ellipsis">Start the day on a good note
-                            to get a nice life and enjoy it</p>
-                        <p class="text-white font-light">20 Mar 2020</p>
-                    </div>
-                    <div
-                        class="in-progress w-40 h-24 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-md rounded-3xl">
-                        <p class="text-white w-full font-medium overflow-hidden text-ellipsis">Start the day on a good note
-                            to get a nice life and enjoy it</p>
-                        <p class="text-white font-light">20 Mar 2020</p>
-                    </div>
+                    
 
                 </div>
                 <div class="w-fit mx-auto">
