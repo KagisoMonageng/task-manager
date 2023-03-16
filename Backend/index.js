@@ -2,7 +2,9 @@ const express = require('express');
 var cors = require('cors')
 const app = express();
 const corsOptions = {
-    origin : '*'
+    origin : '*',
+    methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
+
 }
 const port = 3000;
 

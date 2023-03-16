@@ -102,7 +102,7 @@ export default {
                     name: this.name,
                     surname: this.surname,
                     gender: this.gender
-                });
+                },{headers:{}});
                 sessionStorage.setItem('token', res.data.token)
                 this.$router.push('/dashboard')
             } catch (error) {

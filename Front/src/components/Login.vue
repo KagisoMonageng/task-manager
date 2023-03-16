@@ -20,7 +20,7 @@ export default {
                 const res = await axios.post('account/login', {
                     password: this.password,
                     cred: this.email
-                });
+                },{headers:{}});
                 sessionStorage.setItem('token', res.data.token)
                 this.$router.push('/dashboard')
             } catch (error) {
