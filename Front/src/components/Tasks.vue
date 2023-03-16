@@ -17,7 +17,7 @@ export default {
     },
     async watch() {
         try {
-            var tasks = await axios.get('tasks/' + VueJwtDecode.decode(sessionStorage.getItem('token')).user_id)
+            this.tasks = await axios.get('tasks/' + VueJwtDecode.decode(sessionStorage.getItem('token')).user_id)
         } catch (error) {
             console.log(error)
         }
@@ -114,25 +114,11 @@ export default {
                     </thead>
                     <tbody>
 
-                        <tr class="table-row h-16 bg-gray-100 rounded-xl">
-                            <td class="w-1/5 text-left pl-3 title">Get a new pet</td>
-                            <td class="w-2/5 text-left pl-3">Don't forget to name it Yahoo </td>
-                            <td class="w-1/5 text-left pl-3">22 Mar 2023</td>
-                            <td class=" text-left pl-3"><span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Completed</span></td>
-                            <td class="w-16 text-lg "><div class="btn hover:bg-gray-200 transition-all duration-500 hover:text-white hover:scale-105 w-10 h-10 rounded-full flex justify-center place-items-center"><i class="fi fi-rr-trash my-auto"></i></div></td>
-                        </tr>
-                        <tr class="table-row h-16 bg-gray-100 rounded-xl">
-                            <td class="w-1/5 text-left pl-3 title">Get a new pet</td>
-                            <td class="w-2/5 text-left pl-3">Don't forget to name it Yahoo </td>
-                            <td class="w-1/5 text-left pl-3">22 Mar 2023</td>
-                            <td class=" text-left pl-3"><span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Completed</span></td>
-                            <td class="w-16 text-lg "><div class="btn hover:bg-gray-200 transition-all duration-500 hover:text-white hover:scale-105 w-10 h-10 rounded-full flex justify-center place-items-center"><i class="fi fi-rr-trash my-auto"></i></div></td>
-                        </tr>
-                        <tr class="table-row h-16 bg-gray-100 rounded-xl">
-                            <td class="w-1/5 text-left pl-3 title">Get a new pet</td>
-                            <td class="w-2/5 text-left pl-3">Don't forget to name it Yahoo </td>
-                            <td class="w-1/5 text-left pl-3">22 Mar 2023</td>
-                            <td class=" text-left pl-3"><span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Completed</span></td>
+                        <tr v-for="task of tasks" class="table-row h-16 bg-gray-100 rounded-xl">
+                            <td class="w-1/5 text-left pl-3 title">{{task.title}}</td>
+                            <td class="w-2/5 text-left pl-3">{{ task.desc }} </td>
+                            <td class="w-1/5 text-left pl-3">{{ task.due }}</td>
+                            <td class=" text-left pl-3"><span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ task.status }}</span></td>
                             <td class="w-16 text-lg "><div class="btn hover:bg-gray-200 transition-all duration-500 hover:text-white hover:scale-105 w-10 h-10 rounded-full flex justify-center place-items-center"><i class="fi fi-rr-trash my-auto"></i></div></td>
                         </tr>
                         
