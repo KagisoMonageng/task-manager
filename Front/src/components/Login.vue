@@ -14,20 +14,18 @@ export default {
         initFlowbite();
     },
     methods: {
-
         async submit() {
             try {
                 const res = await axios.post('account/login', {
                     password: this.password,
                     cred: this.email
-                },{headers:{}});
+                });
                 sessionStorage.setItem('token', res.data.token)
                 this.$router.push('/dashboard')
             } catch (error) {
+                this.$toasted.show('Hello world')
                 console.log(error.response.data.message)
             }
-
-
         }
     },
 }

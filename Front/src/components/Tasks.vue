@@ -3,6 +3,7 @@ import { onMounted, watch } from 'vue'
 import { initFlowbite } from 'flowbite'
 import axios from 'axios'
 import VueJwtDecode from 'vue-jwt-decode'
+
 export default {
     name: 'Tasks',
     data() {
@@ -13,6 +14,7 @@ export default {
         }
     }, async created() {
         initFlowbite();
+        
         
     },
      async mounted() {
@@ -230,8 +232,6 @@ thead tr {
     background: linear-gradient(to right, #12c2e9 0%, #C471ED 50%, #F64F59 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-
-
 }
 
 

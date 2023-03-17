@@ -40,7 +40,7 @@ exports.login = async (req, res) =>  {
                             name:results.rows[0].name,
                             email: results.rows[0].email,
                             surname:results.rows[0].surname,
-                            image:results[0].image
+                            image:results.rows[0].image
                         },
                         'mc&ofj^%ihf(ifofhoh$$^%iuhf',
                         {
