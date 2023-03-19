@@ -1,6 +1,35 @@
 const db = require("../config/db.config");
 
 
+exports.setTask = async (req, res) => {
+    const user_id = req.params.user_id;
+    const {title, description, due , color} = req.body;
+    const sql = "INSERT INTO public.tasks( user_id, description, due, color, title, status) VALUES ($1,$2,$3,$4,$5,'In Progress');"
+    db.query(sql,[user_id,description,due,color,title],(err,results)=>{
+        if (err) {
+            console.log(err.message) 
+            res.status(401).json({message:'Failed to add task'})
+        } else {
+            res.status(201).json({message:'Task added'}) 
+        }
+    })  
+}
+
+exports.setColor = async (req, res) => {
+    const task_id = req.params.task_id;
+    const color = req.body.color
+    const sql = 'UPDATE tasks SET color ='+color +' WHERE task_id = '+task_id+';'
+    db.query(sql,(err,result)=>{
+        if (err) {
+            console.log(err.message) 
+            res.status(401).json({message:'Failed to add task'})
+        } else {
+            res.status(201).json({message:'Task added'}) 
+        }
+    })
+
+}
+
 exports.getMyTasks = async (req, res) =>  {
     const user_id = req.params.user_id;
     const sql = "SELECT * FROM tasks WHERE user_id = $1 ORDER BY due";

@@ -71,7 +71,7 @@ export default {
             <div class="flex mb-2 w-full justify-between">
                 <div class="header flex flex-col">
                     <h1 class="font-bold text-xl gradient-text">My tasks</h1>
-                    <p>100,909 total tasks</p>
+                    <p>{{ tasks.length }} total tasks</p>
                 </div>
                 <div class="flex gap-5 left">
                     <div class="header flex flex-col">
@@ -88,78 +88,32 @@ export default {
 
 
             <div class="relative">
-                <div class="flex items-center justify-between pb-4 ">
-                    <div>
-                        <button id="dropdownActionButton" data-dropdown-toggle="dropdownAction"
-                            class="inline-flex items-center text-gray-500  border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                            type="button">
-                            <span class="sr-only">Action button</span>
-                            Action
-                            <svg class="w-3 h-3 ml-2" aria-hidden="true" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
-                                </path>
-                            </svg>
-                        </button>
-                        <!-- Dropdown menu -->
-                        <div id="dropdownAction"
-                            class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-                            <ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
-                                aria-labelledby="dropdownActionButton">
-                                <li>
-                                    <a href="#"
-                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Reward</a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Promote</a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Activate
-                                        account</a>
-                                </li>
-                            </ul>
-                            <div class="py-1">
-                                <a href="#"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete
-                                    User</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        </div>
-                        <input type="text" id="table-search-users"
-                            class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Search for a task">
-                    </div>
-                </div>
+                
 
                 <!-- Data goes here -->
                 <div class="flex w-full justify-start mb-2"><span v-on:click="refresh()" class="hover:bg-slate-200 cursor-pointer p-2 rounded-lg items-center content-center"><i class="fi fi-rr-rotate-right"></i>  Refresh</span></div>
                 <table class="table w-full border-collapse">
                     <thead class="">
                         <tr class="">
-                            <th class="w-1/5 text-left">Title</th>
-                            <th class="w-2/5 text-left">Desc</th>
-                            <th class="w-1/5 text-left">Due date</th>
+                            <th class=""></th>
+                            <th class="text-left">Title</th>
+                            <th class="text-left">Desc</th>
+                            <th class="text-left">Due date</th>
                             <th class="text-left">Status</th>
-                            <th class="w-16 text-left"></th>
+                            <th class="text-left"></th>
                         </tr>
                     </thead>
                     <tbody>
 
                         <tr v-for="task of tasks" class="table-row h-16 bg-gray-100 rounded-xl hover:bg-gray-200 cursor-pointer">
-                            <td class="w-1/5 text-left pl-3 title">{{task.title}}</td>
-                            <td class="w-2/5 text-left pl-3">{{ task.desc }} </td>
-                            <td class="w-1/5 text-left pl-3">{{ dateFormat(task.due)  }}</td>
-                            <td class=" text-left pl-3"><span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ task.status }}</span></td>
-                            <td class="w-16 text-lg "><div @click="deleteTask(task.task_id)" class="btn hover:bg-gray-200 transition-all duration-500 hover:text-white hover:scale-105 w-10 h-10 rounded-full flex justify-center place-items-center"><i class="fi fi-rr-trash my-auto"></i></div></td>
-                        </tr>
-                        
+                            <td class="px-3"> <div class="px-2 py-3 rounded-lg" :style="{backgroundColor:task.color}"></div></td>
 
+                            <td class="text-left pl-3 title">{{task.title}}</td>
+                            <td class="text-left pl-3">{{ task.description }} </td>
+                            <td class="text-left pl-3">{{ dateFormat(task.due)  }}</td>
+                            <td class="text-left pl-3"><span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ task.status }}</span></td>
+                            <td class="text-lg "><div @click="deleteTask(task.task_id)" class="btn hover:bg-gray-200 transition-all duration-500 hover:text-white hover:scale-105 w-10 h-10 rounded-full flex justify-center place-items-center"><i class="fi fi-rr-trash my-auto"></i></div></td>
+                        </tr>
                     </tbody>
 
                 </table>
@@ -172,8 +126,8 @@ export default {
             <div class=" w-full py-4 px-12 flex flex-col justify-center pt-8 gap-4 rounded-3xl bg-gray-100 h-full">
                 <div class="flex justify-center -space-x-32">
                     <div
-                        v-for="task of inProgress" class="in-progress w-40 h-24 cursor-pointer transition-all p-4 duration-500 hover:-translate-y-8 hover:shadow-md rounded-3xl">
-                        <p class="text-white w-full font-medium overflow-hidden text-ellipsis">{{ task.desc }}</p>
+                        v-for="task of inProgress" class="in-progress w-40 h-24 cursor-pointer transition-all p-4 duration-500 hover:-translate-y-4 hover:shadow-md rounded-3xl">
+                        <p class="text-white w-full font-medium overflow-hidden text-ellipsis">{{ task.description }}</p>
                         <p class="text-white font-light">{{ dateFormat(task.due) }}</p>
                     </div>
                     
