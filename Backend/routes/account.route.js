@@ -8,5 +8,6 @@ const account = require("../controllers/account");
 router.post("/register", account.register);
 router.post("/login", account.login);
 router.get("/:user_id", account.getUser);
+router.get("/",account.getAllUsers)
 
 module.exports = router;

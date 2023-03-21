@@ -18,16 +18,29 @@ exports.setTask = async (req, res) => {
 exports.setColor = async (req, res) => {
     const task_id = req.params.task_id;
     const color = req.body.color
-    const sql = 'UPDATE tasks SET color ='+color +' WHERE task_id = '+task_id+';'
-    db.query(sql,(err,result)=>{
+    const sql = 'UPDATE tasks SET color = $1 WHERE task_id = '+task_id+';'
+    db.query(sql,[color],(err,result)=>{
         if (err) {
             console.log(err.message) 
-            res.status(401).json({message:'Failed to add task'})
+            res.status(401).json({message:'Failed to edit task color'})
         } else {
-            res.status(201).json({message:'Task added'}) 
+            res.status(201).json({message:'Color updates'}) 
         }
     })
+}
 
+exports.setProgress = async (req, res) => {
+    const task_id = req.params.task_id;
+    const status = req.body.status
+    const sql = 'UPDATE tasks SET status = $1 WHERE task_id = '+task_id+';'
+    db.query(sql,[status],(err,result)=>{
+        if (err) {
+            console.log(err.message) 
+            res.status(401).json({message:'Failed to edit task status'})
+        } else {
+            res.status(201).json({message:'Status updated'}) 
+        }
+    })
 }
 
 exports.getMyTasks = async (req, res) =>  {

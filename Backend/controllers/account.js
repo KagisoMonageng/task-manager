@@ -1,30 +1,18 @@
 const db = require("../config/db.config");
+const transporter = require("../config/email.config")
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 
-var nodemailer = require("nodemailer");
-var smtpTransport = require("nodemailer-smtp-transport");
-
-const sender = "mercury.media2244@gmail.com";
-var transporter = nodemailer.createTransport({
-  service: "hotmail",
-  auth: {
-    user: "griendgamer@outlook.com", //
-    pass: "YourGamerFriend44", //
-  },
-});
-
 emailDetails = {
-  from: "", //where the email is from
+  from: "mercury.media@zohomail.com", //where the email is from
   to: "", //where the email is to
   subject: "", //email subject
-  text: "", //email
+  html: "", //email
 };
 
 exports.login = async (req, res) =>  {
     const { cred, password } = req.body;
     const sql = "SELECT * FROM users WHERE email = $1";
-
     db.query(sql, [cred], (err, results) =>{
         if (err) {
             res.status(400).json({ message: 'Database connection error'});
@@ -57,19 +45,13 @@ exports.login = async (req, res) =>  {
           }
     })
 };
-
-
 const image = "https://res.cloudinary.com/dev-lab/image/upload/v1669475311/vecteezy_game-shop-vector-logo-design-shopping-bag-combination_10949766_hgwhg1.jpg";
-
 exports.register = async (req, res) =>  {
     const { email, password, name, surname, gender } = req.body;
-
     const sql = "SELECT * FROM users WHERE email = $1";
 
     db.query(sql, [email], (err, results) => {
         if (results.rowCount == 0) {
-
-          
             db.query(
                 "INSERT INTO users (name,surname,email,password,image) VALUES ($1,$2,$3,$4,$5) RETURNING *",
                 [name, surname, email, password, image],
@@ -90,9 +72,17 @@ exports.register = async (req, res) =>  {
                         algorithm:'HS512',
                         expiresIn: '24h'
                     })
-
-                    res.status(200).json({message:'Welcome! ' + results.rows[0].name,token:key})
-
+                    emailDetails.to = email,
+                    emailDetails.subject = "Welcome to Mercury!";
+                    emailDetails.html ='<div><h1 style="font-family:sans-serif;padding:0;margin:0;"> Welcome! '+results.rows[0].name +'\n</h1><br><p style="padding:0;margin:0;font-family:sans-serif;">Your account is now registered on Mercury Tasks. We hope you enjoy your visits on our app</p>\n\n<br><br><p style="padding:0;margin:0;font-family:sans-serif;"><b>Mercury Media</b></p></div>'
+                    transporter.sendMail(emailDetails, (emailErr) => {
+                      if (emailErr) {
+                        console.log(emailErr)
+                        res.status(400).json({ message: "Failed to send email" });
+                      } else {
+                        res.status(200).json({message:'Welcome! ' + results.rows[0].name,token:key})
+                      }
+                    })
                   }
                 })
         }else{
@@ -100,9 +90,34 @@ exports.register = async (req, res) =>  {
         }
     })
 
-
 };
 
 exports.getUser = async (req, res) =>  {
-
+  const user_id = req.params.user_id;
+  db.query('SELECT * FROM users WHERE user_id = $1',[user_id],(err, result) => {
+    if (err) {
+      res.status(400).json({message:'Failed to get user'})
+    } else {
+      if (result.rowCount == 0){
+        res.status(400).json({message:'User not found'})
+      }else{
+        res.status(200).json(result.rows[0])
+      }
+    }
+  })
 };
+
+exports.getAllUsers = async (req, res) =>  {
+  db.query('SELECT * FROM users',(err, result) => {
+    if (err) {
+      res.status(400).json({message:'Failed to get users'})
+    } else {
+      if (result.rowCount == 0){
+        res.status(400).json({message:'No users found'})
+      }else{
+        res.status(200).json(result.rows)
+      }
+    }
+  })
+};
+
